@@ -291,8 +291,9 @@ func (i *wrappedIterator) PostRequest(e *route.Endpoint) {
 func getStickySession(request *http.Request) string {
 	// Try choosing a backend using sticky session
 	if _, err := request.Cookie(StickyCookieKey); err == nil {
-		if sticky, err := request.Cookie(VcapCookieId); err == nil {
-			return sticky.Value
+		if _, err := request.Cookie(VcapCookieId); err == nil {
+			//return sticky.Value
+			return ""
 		}
 	}
 	return ""

@@ -8,15 +8,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/uber-go/zap"
-
-	"code.cloudfoundry.org/gorouter/handlers"
 	"code.cloudfoundry.org/gorouter/logger"
 	"code.cloudfoundry.org/gorouter/metrics"
 	"code.cloudfoundry.org/gorouter/proxy/fails"
 	"code.cloudfoundry.org/gorouter/proxy/handler"
 	"code.cloudfoundry.org/gorouter/proxy/utils"
 	"code.cloudfoundry.org/gorouter/route"
+	"github.com/uber-go/zap"
 )
 
 const (
@@ -294,11 +292,12 @@ func setupStickySession(
 	maxAge := 0
 
 	// did the endpoint change?
-	sticky := originalEndpointId != "" && originalEndpointId != endpoint.PrivateInstanceId
+	//sticky := originalEndpointId != "" && originalEndpointId != endpoint.PrivateInstanceId
+	sticky := false
 
 	for _, v := range response.Cookies() {
 		if v.Name == StickyCookieKey {
-			sticky = true
+			//sticky = true
 			if v.MaxAge < 0 {
 				maxAge = v.MaxAge
 			}
@@ -306,13 +305,13 @@ func setupStickySession(
 			break
 		}
 	}
-	
+
 	for _, v := range response.Cookies() {
 		if v.Name == VcapCookieId {
 			sticky = false
 			break
 		}
-	}	
+	}
 
 	if sticky {
 		// right now secure attribute would as equal to the JSESSION ID cookie (if present),
@@ -339,8 +338,8 @@ func setupStickySession(
 func getStickySession(request *http.Request) string {
 	// Try choosing a backend using sticky session
 	if _, err := request.Cookie(StickyCookieKey); err == nil {
-		if sticky, err := request.Cookie(VcapCookieId); err == nil {
-			return sticky.Value
+		if _, err := request.Cookie(VcapCookieId); err == nil {
+			return ""
 		}
 	}
 	return ""
