@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
+	"code.cloudfoundry.org/gorouter/handlers"
 	"code.cloudfoundry.org/gorouter/logger"
 	"code.cloudfoundry.org/gorouter/metrics"
 	"code.cloudfoundry.org/gorouter/proxy/fails"
 	"code.cloudfoundry.org/gorouter/proxy/handler"
-	"code.cloudfoundry.org/gorouter/proxy/handlers"
 	"code.cloudfoundry.org/gorouter/proxy/utils"
 	"code.cloudfoundry.org/gorouter/route"
 	"github.com/uber-go/zap"
